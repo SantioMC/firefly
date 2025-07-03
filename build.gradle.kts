@@ -20,3 +20,9 @@ subprojects {
         options.compilerArgs.add("-parameters")
     }
 }
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
