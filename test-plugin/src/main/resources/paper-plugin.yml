@@ -1,0 +1,10 @@
+name: firefly-test-layer
+author: Santio71
+main: me.santio.firefly.test.TestPlugin
+version: 1.0.0
+api-version: 1.21.4
+dependencies:
+  server:
+    FastAsyncWorldEdit:
+      required: false
+      join-classpath: true

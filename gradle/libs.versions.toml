@@ -1,0 +1,54 @@
+[versions]
+kotlin = "2.1.20"
+ksp = "2.1.20-2.0.1"
+
+kotlinx-coroutines = "1.9.0"
+kotlinx-json = "1.8.1"
+kotlinx-hocon = "1.8.1"
+kotlinx-ktoml = "0.7.0"
+kotlinx-kaml = "0.83.0"
+
+slf4j = "2.0.17"
+autoservice = "1.1.1"
+
+cloud = "2.0.0"
+cloud-paper = "2.0.0-beta.10"
+
+fawe = "2.13.0"
+papermc = "1.21.4-R0.1-SNAPSHOT"
+
+pkl = "0.28.2"
+objenesis = "3.4"
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[libraries]
+ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp"}
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
+
+pkl = { module = "org.pkl-lang:pkl-config-kotlin", version.ref = "pkl" }
+objenesis = { module = "org.objenesis:objenesis", version.ref = "objenesis" }
+
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-json" }
+kotlinx-serialization-hocon = { module = "org.jetbrains.kotlinx:kotlinx-serialization-hocon", version.ref = "kotlinx-hocon" }
+kotlinx-serialization-toml = { module = "com.akuleshov7:ktoml-core", version.ref = "kotlinx-ktoml" }
+kotlinx-serialization-yaml = { module = "com.charleskorn.kaml:kaml", version.ref = "kotlinx-kaml" }
+
+papermc = { module = "io.papermc.paper:paper-api", version.ref = "papermc" }
+fawe-core = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Core", version.ref = "fawe" }
+fawe-bukkit = { module = "com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit", version.ref = "fawe" }
+
+cloud-core = { module = "org.incendo:cloud-core", version.ref = "cloud" }
+cloud-annotations = { module = "org.incendo:cloud-annotations", version.ref = "cloud" }
+cloud-kotlin-annotations = { module = "org.incendo:cloud-kotlin-coroutines-annotations", version.ref = "cloud" }
+cloud-kotlin-extensions = { module = "org.incendo:cloud-kotlin-extensions", version.ref = "cloud" }
+cloud-platform-paper = { module = "org.incendo:cloud-paper", version.ref = "cloud-paper" }
+
+[bundles]
+cloud = ["cloud-core", "cloud-annotations", "cloud-kotlin-annotations", "cloud-kotlin-extensions"]
