@@ -20,6 +20,8 @@ class FireflyPlugin: Plugin<Project> {
                 val dependencyHandler = target.dependencies.extensions
                     .findByType(FireflyDependencyHandler::class.java)!!
 
+//                target.repositories.add(MavenArtifactRepository)
+
                 target.dependencies.add("implementation", dependencyHandler.core())
                 target.dependencies.add("ksp", dependencyHandler.processor())
             }

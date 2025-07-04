@@ -1,7 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.ksp)
-
     id("me.santio.firefly")
 }
 

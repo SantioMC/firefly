@@ -1,12 +1,11 @@
 plugins {
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.ksp)
-
     id("me.santio.firefly")
 }
 
 repositories {
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {

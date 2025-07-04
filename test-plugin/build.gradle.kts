@@ -1,7 +1,7 @@
 plugins {
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.publish)
 
     id("me.santio.firefly")
 }

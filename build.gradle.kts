@@ -1,28 +1,55 @@
 plugins {
     `java-library`
-    `maven-publish`
+    signing
+
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.publish)
 }
 
 allprojects {
-    group = "me.santio"
-    version = "1.0.0-SNAPSHOT"
-}
-
-subprojects {
-    apply(plugin = "java-library")
-    apply(plugin = "maven-publish")
+    group = findProperty("group")!!
+    version = findProperty("version")!!
 
     repositories {
         mavenCentral()
     }
+}
+
+subprojects {
+    apply(plugin = "java-library")
+    apply(plugin = "signing")
+
+    apply(plugin = rootProject.libs.plugins.kotlin.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.publish.get().pluginId)
 
     tasks.withType<JavaCompile> {
         options.compilerArgs.add("-parameters")
     }
+
+    publishing {
+        repositories {
+            maven {
+                name = "githubPackages"
+                url = uri("https://maven.pkg.github.com/santiomc/firefly")
+                credentials {
+                    username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
+                    password = findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
+    }
+
+    mavenPublishing {
+        coordinates(
+            groupId = "${project.group}.firefly",
+            artifactId = project.createArtifactId(),
+            version = project.version as String
+        )
+    }
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+fun Project.createArtifactId(): String {
+    return if (parent != null && parent != rootProject) {
+        "${parent!!.createArtifactId()}-${name}"
+    } else name
 }
