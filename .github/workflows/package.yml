@@ -14,12 +14,18 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v4
+
         - name: Setup Java
           uses: actions/setup-java@v4
           with:
             distribution: 'temurin'
             java-version: 21
+
         - name: Setup Gradle
           uses: gradle/actions/setup-gradle@v4
+
         - name: Publish Commit
           run: ./gradlew --no-daemon -Pversion=${GITHUB_SHA::7} publish
+          env:
+            GITHUB_ACTOR: ${{ github.actor }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
