@@ -1,3 +1,5 @@
+import java.util.*
+
 plugins {
     `java-gradle-plugin`
 
@@ -5,8 +7,12 @@ plugins {
     id("com.vanniktech.maven.publish") version "0.33.0"
 }
 
-group = findProperty("group")!!
-version = findProperty("version")!!
+val props = Properties().apply {
+    load(file("../gradle.properties").inputStream())
+}
+
+group = props["group"].toString()
+version = props["version"].toString()
 
 repositories {
     mavenCentral()
@@ -14,8 +20,8 @@ repositories {
 
 dependencies {
     compileOnly(gradleApi())
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.20")
-    compileOnly("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.1.20-2.0.1")
+    implementation("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:2.1.20-2.0.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.20")
     implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.7")
 }
 
@@ -38,11 +44,11 @@ kotlin {
 publishing {
     repositories {
         maven {
-            name = "githubPackages"
-            url = uri("https://maven.pkg.github.com/santiomc/firefly")
+            name = "santioRepo"
+            url = uri("https://repo.santio.me/repository/public/")
             credentials {
-                username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
-                password = findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                username = findProperty("repo.santio.username") as String? ?: System.getenv("REPO_USER")
+                password = findProperty("repo.santio.password") as String? ?: System.getenv("REPO_PASS")
             }
         }
     }
@@ -52,6 +58,6 @@ mavenPublishing {
     coordinates(
         groupId = "${project.group}.firefly",
         artifactId = "plugin",
-        version = findProperty("version") as String
+        version = project.version as String,
     )
 }

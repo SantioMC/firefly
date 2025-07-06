@@ -1,4 +1,4 @@
-package me.santio.firefly.plugin.dependency.extension
+package me.santio.firefly.plugin.extension
 
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.reflect.TypeOf

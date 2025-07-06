@@ -5,6 +5,7 @@ import org.gradle.api.tasks.Optional
 
 open class FireflyConfiguration {
     @Input @Optional var layer: String? = null
+    @Input @Optional var fireflyVersion: String = "+"
     @Input @Optional var includeDependencies: Boolean = true
     @Input @Optional var configureShadow: Boolean = true
 }

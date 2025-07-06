@@ -29,11 +29,11 @@ subprojects {
     publishing {
         repositories {
             maven {
-                name = "githubPackages"
-                url = uri("https://maven.pkg.github.com/santiomc/firefly")
+                name = "santioRepo"
+                url = uri("https://repo.santio.me/repository/public/")
                 credentials {
-                    username = findProperty("gpr.user") as String? ?: System.getenv("GITHUB_ACTOR")
-                    password = findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+                    username = findProperty("repo.santio.username") as String? ?: System.getenv("REPO_USER")
+                    password = findProperty("repo.santio.password") as String? ?: System.getenv("REPO_PASS")
                 }
             }
         }
