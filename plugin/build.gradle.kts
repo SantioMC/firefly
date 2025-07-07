@@ -12,7 +12,9 @@ val props = Properties().apply {
 }
 
 group = props["group"].toString()
-version = props["version"].toString()
+version = findProperty("version")
+    ?.takeIf { it.toString().isNotBlank() }
+    ?: props["version"].toString()
 
 repositories {
     mavenCentral()
