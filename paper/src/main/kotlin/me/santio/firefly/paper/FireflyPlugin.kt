@@ -1,10 +1,14 @@
 package me.santio.firefly.paper
 
 import io.leangen.geantyref.TypeToken
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.runBlocking
 import me.santio.firefly.Color
 import me.santio.firefly.command.FireflyCommand
 import me.santio.firefly.command.Parser
+import me.santio.firefly.coroutine.Scoped
 import me.santio.firefly.dataDirectory
 import me.santio.firefly.hook.ShutdownHook
 import me.santio.firefly.instance.InstanceManager
@@ -22,14 +26,12 @@ import org.incendo.cloud.annotations.AnnotationParser
 import org.incendo.cloud.execution.ExecutionCoordinator
 import org.incendo.cloud.kotlin.coroutines.annotations.installCoroutineSupport
 import org.incendo.cloud.paper.PaperCommandManager
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.io.path.createDirectories
 
-abstract class FireflyPlugin : JavaPlugin() {
+abstract class FireflyPlugin : JavaPlugin(), Scoped {
 
     private val shutdownHooks = mutableListOf<ShutdownHook>()
-    internal val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    override val scope: CoroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     val serviceLoader = KotlinServiceLoader(classLoader)
 
     val internalMiniMessage = MiniMessage.builder()
@@ -39,12 +41,6 @@ abstract class FireflyPlugin : JavaPlugin() {
             it.resolver(Placeholder.parsed("prefix", "<primary>\uD83D\uDD25 Firefly</primary> <dark_gray>|</dark_gray> "))
         }
         .build()
-
-    fun launch(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> Unit
-    ) = scope.launch(context, start, block)
 
     open fun disable() {}
     open suspend fun enable() {}

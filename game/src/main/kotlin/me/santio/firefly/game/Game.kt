@@ -1,29 +1,24 @@
 package me.santio.firefly.game
 
-import kotlinx.coroutines.*
-import me.santio.firefly.player.FireflyPlayer
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import me.santio.firefly.coroutine.Scoped
 import me.santio.firefly.identity.Identifiable
 import me.santio.firefly.identity.createId
 import me.santio.firefly.paper.player.PaperFireflyPlayer
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
+import me.santio.firefly.player.FireflyPlayer
 
 abstract class Game(
     val name: String
-): Identifiable {
+): Identifiable, Scoped {
     override val prefix: String = "game"
     override val id: String = createId()
 
-    private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    override val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     var state: State = State.Stopped; private set
     val players = mutableListOf<PaperFireflyPlayer>()
-
-    fun launch(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> Unit
-    ) = scope.launch(context, start, block)
 
     open suspend fun add(player: PaperFireflyPlayer) = players.add(player)
 

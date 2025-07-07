@@ -1,34 +1,29 @@
 package me.santio.firefly.player
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import me.santio.firefly.coroutine.Scoped
 import me.santio.firefly.identity.Identifiable
 import me.santio.firefly.instance.Instance
 import me.santio.firefly.instance.InstanceManager
 import me.santio.firefly.player.states.PlayerCooldownState
 import me.santio.firefly.state.StateContainer
 import java.util.*
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.time.Duration
 
 @Suppress("CanBeParameter")
 abstract class FireflyPlayer(
     open val username: String,
     open val uniqueId: UUID,
-): StateContainer(), Identifiable {
-    val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+): StateContainer(), Identifiable, Scoped {
+    override val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
     override val prefix: String = ""
     override val id: String = uniqueId.toString()
 
     val instance: Instance<*>
         get() = InstanceManager.instances.first { it.contains(this) }
-
-    fun launch(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> Unit
-    ) = scope.launch(context, start, block)
 
     abstract suspend fun reset(
         inventory: Boolean = true,
