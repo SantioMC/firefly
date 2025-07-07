@@ -28,6 +28,12 @@ class FireflyPlugin: Plugin<Project> {
             it.name = "papermc"
         }
 
+        target.repositories.maven {
+            // Required for FastAsyncWorldEdit
+            it.url = URI("https://maven.enginehub.org/repo/")
+            it.name = "enginehub"
+        }
+
         createDependencyExtensions(target, configuration)
         target.afterEvaluate {
             if (configuration.includeDependencies) {
