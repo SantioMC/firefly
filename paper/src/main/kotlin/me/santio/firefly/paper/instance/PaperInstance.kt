@@ -49,6 +49,7 @@ class PaperInstance internal constructor(
 
     @OptIn(ExperimentalPathApi::class)
     override suspend fun load() {
+        super.load()
         val creator = WorldCreator.name(container)
             .generator(VoidGenerator)
             .keepSpawnLoaded(TriState.FALSE)
@@ -69,6 +70,7 @@ class PaperInstance internal constructor(
     }
 
     override suspend fun unload() {
+        super.unload()
         if (isVanilla) error("You can't unload vanilla worlds")
 
         val world = world ?: return
