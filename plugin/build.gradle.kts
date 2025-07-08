@@ -5,6 +5,7 @@ plugins {
 
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
     id("com.vanniktech.maven.publish") version "0.33.0"
+    id("com.github.gmazzo.buildconfig") version "5.6.7"
 }
 
 val props = Properties().apply {
@@ -13,7 +14,7 @@ val props = Properties().apply {
 
 group = props["group"].toString()
 version = findProperty("version")
-    ?.takeIf { it.toString().isNotBlank() }
+    ?.takeIf { it != "unspecified" }
     ?: props["version"].toString()
 
 repositories {
@@ -37,6 +38,13 @@ gradlePlugin {
             tags.set(listOf("minecraft", "firefly", "server", "framework"))
         }
     }
+}
+
+buildConfig {
+    className("BuildConfig")
+    packageName("me.santio.firefly.plugin")
+
+    buildConfigField("VERSION", project.version.toString())
 }
 
 kotlin {

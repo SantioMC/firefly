@@ -1,13 +1,15 @@
 package me.santio.firefly.plugin.dependency
 
+import me.santio.firefly.plugin.config.FireflyConfiguration
 import me.santio.firefly.plugin.extension.DependencyExtension
+import org.gradle.api.Project
 import org.gradle.api.artifacts.ExternalModuleDependency
-import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.api.reflect.TypeOf
 
 class SimpleFireflyDependencyExtension(
-    private val handler: DependencyHandler,
-    private val dependency: String,
+    private val target: Project,
+    private val config: FireflyConfiguration,
+    private val dependency: (String) -> String,
     private val configuration: String = "implementation",
 ): DependencyExtension<() -> ExternalModuleDependency> {
 
@@ -15,7 +17,7 @@ class SimpleFireflyDependencyExtension(
     override val function: () -> ExternalModuleDependency = ::handle
 
     fun handle(): ExternalModuleDependency {
-        return handler.add(configuration, dependency) as ExternalModuleDependency
+        return target.dependencies.add(configuration, dependency(config.fireflyVersion)) as ExternalModuleDependency
     }
 
 }

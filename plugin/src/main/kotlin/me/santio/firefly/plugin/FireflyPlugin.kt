@@ -18,6 +18,7 @@ class FireflyPlugin: Plugin<Project> {
         val configuration = target.extensions.create("firefly", FireflyConfiguration::class.java)
 
         target.dependencies.extensions.create("firefly", FireflyDependencyHandler::class.java)
+        createDependencyExtensions(target, configuration)
 
         // Default repositories required for Firefly to work
         target.repositories.mavenCentral()
@@ -34,7 +35,6 @@ class FireflyPlugin: Plugin<Project> {
             it.name = "enginehub"
         }
 
-        createDependencyExtensions(target, configuration)
         target.afterEvaluate {
             if (configuration.includeDependencies) {
                 target.repositories.maven {
@@ -52,10 +52,7 @@ class FireflyPlugin: Plugin<Project> {
         target.plugins.apply("java-library")
         target.plugins.apply("org.jetbrains.kotlin.jvm")
         target.plugins.apply("com.google.devtools.ksp")
-
-        target.plugins.withId("org.jetbrains.kotlin.jvm") {
-            configureKotlin(target)
-        }
+        target.plugins.withId("org.jetbrains.kotlin.jvm") { configureKotlin(target) }
     }
 
     private fun handleDependencies(target: Project, configuration: FireflyConfiguration) {
@@ -70,19 +67,19 @@ class FireflyPlugin: Plugin<Project> {
         val dependencyHandler = target.dependencies.extensions
             .findByType(FireflyDependencyHandler::class.java)!!
 
-        target.dependencies.extensions.addExtension("game", SimpleFireflyDependencyExtension(
-            target.dependencies,
-            dependencyHandler.game(configuration.fireflyVersion),
-        ))
+        target.dependencies.extensions.addExtension(
+            "game",
+            SimpleFireflyDependencyExtension(target, configuration, dependencyHandler::game)
+        )
 
-        target.dependencies.extensions.addExtension("paper", SimpleFireflyDependencyExtension(
-            target.dependencies,
-            dependencyHandler.paper(configuration.fireflyVersion),
-        ))
+        target.dependencies.extensions.addExtension(
+            "paper",
+            SimpleFireflyDependencyExtension(target, configuration, dependencyHandler::paper)
+        )
 
         target.dependencies.extensions.addExtension(
             "config",
-            ConfigDependencyExtension(target.dependencies, configuration.fireflyVersion)
+            ConfigDependencyExtension(target.dependencies, configuration)
         )
     }
 
